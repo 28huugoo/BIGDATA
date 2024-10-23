@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 public class Ventana {
 
     JFrame frame = new JFrame();
+    ImageIcon gemelos = new ImageIcon("logo.png");
+    JLabel gemelosL = new JLabel(gemelos);
     JPanel panel = new JPanel() {
         private Image fondoImg = new ImageIcon("fondo.jpg").getImage();
 
@@ -40,7 +42,7 @@ public class Ventana {
     public Ventana() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIconImage(icono.getImage());
-        frame.setTitle("EMPAREJA LAS CARTAS !!!");
+        frame.setTitle("EMPAREJA LAS SLOTS DE ZONAGEMELOS!!!");
         frame.setResizable(false);
         frame.setSize(1068, 601);
         frame.setLocation(700, 300);
@@ -48,11 +50,13 @@ public class Ventana {
         panel.setLocation(700, 300);
         panel.setBackground(Color.yellow);
 
-        etiqueta.setText("JUEGO DE CARTAS");
+        gemelosL.setBounds(375, 290, 300, 300);
+        
+        etiqueta.setText("EMPAREJA LAS CARTAS PARA GANAR! :D");
         etiqueta.setFont(new Font("Arial", Font.BOLD, 20));
-        etiqueta.setBounds(75, 50, 340, 100);
+        etiqueta.setBounds(75, 50, 400, 100);
         etiqueta.setForeground(Color.white);
-        boton.setText("EMPEZAR EL JUEGO");
+        boton.setText("DESBLOQUEAR SLOTS");
         boton.setFont(new Font("Arial", Font.BOLD, 20));
         boton.setBounds(75, 150, 400, 100);
         boton.setForeground(Color.white);
@@ -64,6 +68,7 @@ public class Ventana {
                 new Cartas();
             }
         });
+        panel.add(gemelosL);
         panel.add(boton);
         panel.add(etiqueta);
         frame.add(panel);
