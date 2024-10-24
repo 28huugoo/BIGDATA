@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -47,6 +48,16 @@ public class Cartas {
     JLabel carta4 = new JLabel(reverso);
     JLabel carta5 = new JLabel(reverso);
     JLabel carta6 = new JLabel(reverso);
+
+    int cartaSel1 = 0;
+    int cartaSel2 = 0;
+
+    boolean c1 = false;
+    boolean c2 = false;
+    boolean c3 = false;
+    boolean c4 = false;
+    boolean c5 = false;
+    boolean c6 = false;
 
     public Cartas() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,12 +101,21 @@ public class Cartas {
         MouseListener raton1 = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (carta1.getIcon() == reverso) {
-                    carta1.setIcon(z2);
-                } else {
-                    carta1.setIcon(reverso);
+                if (cartaSel1 == 0) {
+                    if (carta1.getIcon() == reverso) {
+                        carta1.setIcon(z2);
+                        cartaSel1 = 1;
+                        c1 = true;
+                        if (c1 == true && c5 == true) {
+                            cartaSel1 = 0;
+                            JOptionPane.showMessageDialog(frame, "Has encontrado la pareja", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } else {
+                        carta1.setIcon(reverso);
+                    }
                 }
             }
+            //1 con 5 dos con tres 
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -120,10 +140,19 @@ public class Cartas {
         MouseListener raton1 = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (carta2.getIcon() == reverso) {
-                    carta2.setIcon(z3);
-                } else {
-                    carta2.setIcon(reverso);
+
+                if (cartaSel1 == 0) {
+                    if (carta2.getIcon() == reverso) {
+                        carta2.setIcon(z3);
+                        cartaSel1 = 1;
+                        c2 = true;
+                        if (c2 == true && c3 == true) {
+                            cartaSel1 = 0;
+                            JOptionPane.showMessageDialog(frame, "Has encontrado la pareja", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } else {
+                        carta2.setIcon(reverso);
+                    }
                 }
             }
 
@@ -180,11 +209,21 @@ public class Cartas {
         MouseListener raton1 = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (carta4.getIcon() == reverso) {
-                    carta4.setIcon(z1);
-                } else {
-                    carta4.setIcon(reverso);
+
+                if (cartaSel1 == 0) {
+                    if (carta4.getIcon() == reverso) {
+                        carta4.setIcon(z1);
+                        cartaSel1 = 1;
+                        c1 = true;
+                        if (c1 == true && c5 == true) {
+                            cartaSel1 = 0;
+                            JOptionPane.showMessageDialog(frame, "Has encontrado la pareja", "Enhorabuena", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    } else {
+                        carta4.setIcon(reverso);
+                    }
                 }
+
             }
 
             @Override
