@@ -6,21 +6,196 @@ package login_gonzalo_hugo;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  *
  * @author FP
  */
 public class Frame extends javax.swing.JFrame {
+
     /**
      * Creates new form Frame
      */
     public Frame() {
         initComponents();
         setTitle("Inicio de sesión en SQL");
+    }
+
+    public static String getMD5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void Crear(String usuario, String contrasena) {
+
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String url = "jdbc:mysql://localhost:3306/login";
+        String user = "root";
+        String pass = "root";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pass);
+            String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, usuario);
+            pstmt.setString(2, contrasena);
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al crear el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error en la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    public void Acceder(String usuario, String contrasena) {
+
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String url = "jdbc:mysql://localhost:3306/login";
+        String user = "root";
+        String pass = "root";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pass);
+
+            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, usuario);
+            pstmt.setString(2, contrasena);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Has entrado con el usuario y contraseña correctos, felicidades!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al acceder a la BBDD", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error en la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void Restablecer(String usuario, String contrasena) {
+
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String url = "jdbc:mysql://localhost:3306/login";
+        String user = "root";
+        String pass = "root";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pass);
+
+            String sqlCheck = "SELECT * FROM users WHERE username = ?";
+            pstmt = conn.prepareStatement(sqlCheck);
+            pstmt.setString(1, usuario);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String sqlUpdate = "UPDATE users SET password = ? WHERE username = ?";
+                pstmt = conn.prepareStatement(sqlUpdate);
+                pstmt.setString(1, contrasena);
+                pstmt.setString(2, usuario);
+
+                int rowsAffected = pstmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(this, "Contraseña reestablecida exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al reestablecer la contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "El usuario no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error en la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -33,6 +208,7 @@ public class Frame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanelBanda = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jPanelContenido = new javax.swing.JPanel();
         jLogin = new javax.swing.JLabel();
         jUsuario = new javax.swing.JLabel();
@@ -40,35 +216,45 @@ public class Frame extends javax.swing.JFrame {
         jContrasena = new javax.swing.JLabel();
         jContrasenaField = new javax.swing.JPasswordField();
         jCrearUsuario = new javax.swing.JButton();
+        jRestablecer = new javax.swing.JButton();
         jAccederUsuario = new javax.swing.JButton();
-        jReestablecerContrasena = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inicio de Sesión en SQL");
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanelBanda.setBackground(new java.awt.Color(0, 153, 153));
+        jPanelBanda.setBackground(new java.awt.Color(0, 0, 0));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\LOGIN_GONZALO_HUGO\\img\\banner.png")); // NOI18N
 
         javax.swing.GroupLayout jPanelBandaLayout = new javax.swing.GroupLayout(jPanelBanda);
         jPanelBanda.setLayout(jPanelBandaLayout);
         jPanelBandaLayout.setHorizontalGroup(
             jPanelBandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
+            .addGroup(jPanelBandaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanelBandaLayout.setVerticalGroup(
             jPanelBandaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
+            .addGroup(jPanelBandaLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanelBanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 630));
 
-        jLogin.setBackground(new java.awt.Color(255, 204, 255));
+        jPanelContenido.setBackground(new java.awt.Color(204, 255, 255));
+
+        jLogin.setBackground(new java.awt.Color(0, 153, 153));
         jLogin.setFont(new java.awt.Font("MV Boli", 1, 18)); // NOI18N
         jLogin.setText("LOGIN");
         jLogin.setOpaque(true);
 
-        jUsuario.setBackground(new java.awt.Color(255, 204, 255));
+        jUsuario.setBackground(new java.awt.Color(0, 153, 153));
         jUsuario.setFont(new java.awt.Font("MV Boli", 1, 18)); // NOI18N
         jUsuario.setText("USUARIO");
         jUsuario.setAlignmentX(0.5F);
@@ -76,7 +262,13 @@ public class Frame extends javax.swing.JFrame {
         jUsuario.setOpaque(true);
         jUsuario.setPreferredSize(new java.awt.Dimension(70, 35));
 
-        jContrasena.setBackground(new java.awt.Color(255, 204, 255));
+        jUsuarioField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUsuarioFieldActionPerformed(evt);
+            }
+        });
+
+        jContrasena.setBackground(new java.awt.Color(0, 153, 153));
         jContrasena.setFont(new java.awt.Font("MV Boli", 1, 18)); // NOI18N
         jContrasena.setText("CONTRASEÑA");
         jContrasena.setOpaque(true);
@@ -98,15 +290,25 @@ public class Frame extends javax.swing.JFrame {
             }
         });
 
+        jRestablecer.setBackground(new java.awt.Color(0, 0, 0));
+        jRestablecer.setFont(new java.awt.Font("MV Boli", 1, 18)); // NOI18N
+        jRestablecer.setForeground(new java.awt.Color(255, 255, 255));
+        jRestablecer.setText("RESTABLECER CONTRASEÑA");
+        jRestablecer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRestablecerActionPerformed(evt);
+            }
+        });
+
         jAccederUsuario.setBackground(new java.awt.Color(0, 0, 0));
         jAccederUsuario.setFont(new java.awt.Font("MV Boli", 1, 18)); // NOI18N
         jAccederUsuario.setForeground(new java.awt.Color(255, 255, 255));
         jAccederUsuario.setText("ACCEDER USUARIO");
-
-        jReestablecerContrasena.setBackground(new java.awt.Color(0, 0, 0));
-        jReestablecerContrasena.setFont(new java.awt.Font("MV Boli", 1, 18)); // NOI18N
-        jReestablecerContrasena.setForeground(new java.awt.Color(255, 255, 255));
-        jReestablecerContrasena.setText("REESTABLECER CONTRASEÑA");
+        jAccederUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jAccederUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelContenidoLayout = new javax.swing.GroupLayout(jPanelContenido);
         jPanelContenido.setLayout(jPanelContenidoLayout);
@@ -115,23 +317,20 @@ public class Frame extends javax.swing.JFrame {
             .addGroup(jPanelContenidoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContenidoLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jAccederUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(361, 361, 361))
+                    .addGroup(jPanelContenidoLayout.createSequentialGroup()
+                        .addGroup(jPanelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanelContenidoLayout.createSequentialGroup()
                         .addGroup(jPanelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jUsuarioField, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jContrasenaField, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCrearUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jReestablecerContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanelContenidoLayout.createSequentialGroup()
-                        .addGroup(jPanelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jRestablecer, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jAccederUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 44, Short.MAX_VALUE))))
         );
         jPanelContenidoLayout.setVerticalGroup(
             jPanelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,9 +349,9 @@ public class Frame extends javax.swing.JFrame {
                 .addComponent(jCrearUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jAccederUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jReestablecerContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jRestablecer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanelContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 390, 630));
@@ -161,17 +360,26 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jContrasenaFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jContrasenaFieldActionPerformed
-        // TODO add your handling code here:
+        jContrasenaField.setText("");
     }//GEN-LAST:event_jContrasenaFieldActionPerformed
 
     private void jCrearUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCrearUsuarioActionPerformed
-        if (jContrasenaField == null || jContrasenaField == null) {
-            JOptionPane.showMessageDialog(this, "Debes de rellenar todos los campos para crear el usuario", "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else {
-
-        }
-
+        new dialogo(this, true);
     }//GEN-LAST:event_jCrearUsuarioActionPerformed
+
+    private void jAccederUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAccederUsuarioActionPerformed
+        String usuario = jUsuarioField.getText().toString();
+        Acceder(usuario, getMD5(new String(jContrasenaField.getPassword())));
+    }//GEN-LAST:event_jAccederUsuarioActionPerformed
+
+    private void jRestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRestablecerActionPerformed
+        String usuario = jUsuarioField.getText().toString();
+        Restablecer(usuario, getMD5(new String(jContrasenaField.getPassword())));
+    }//GEN-LAST:event_jRestablecerActionPerformed
+
+    private void jUsuarioFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUsuarioFieldActionPerformed
+        jUsuarioField.setText("");
+    }//GEN-LAST:event_jUsuarioFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,16 +395,24 @@ public class Frame extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -213,10 +429,11 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JLabel jContrasena;
     private javax.swing.JPasswordField jContrasenaField;
     private javax.swing.JButton jCrearUsuario;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLogin;
     private javax.swing.JPanel jPanelBanda;
     private javax.swing.JPanel jPanelContenido;
-    private javax.swing.JButton jReestablecerContrasena;
+    private javax.swing.JButton jRestablecer;
     private javax.swing.JLabel jUsuario;
     private javax.swing.JTextField jUsuarioField;
     // End of variables declaration//GEN-END:variables
