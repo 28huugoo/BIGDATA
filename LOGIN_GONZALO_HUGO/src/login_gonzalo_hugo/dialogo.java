@@ -44,7 +44,9 @@ public class dialogo extends javax.swing.JDialog {
             throw new RuntimeException(e);
         }
     }
-
+    public void ponerNombre(String nombre){
+        jNuevo.setText(nombre);
+    }
     public void Crear(String usuario, String contrasena) {
 
         if (usuario.isEmpty() || contrasena.isEmpty()) {
@@ -87,7 +89,6 @@ public class dialogo extends javax.swing.JDialog {
             }
 
         }
-
     }
 
     /**
@@ -147,10 +148,9 @@ public class dialogo extends javax.swing.JDialog {
                 .addGap(49, 49, 49)
                 .addGroup(jPanelDialogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jCrearUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                    .addGroup(jPanelDialogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPasswordField1)
-                        .addComponent(jTextField1)
-                        .addComponent(jNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)))
+                    .addComponent(jPasswordField1)
+                    .addComponent(jTextField1)
+                    .addComponent(jNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanelDialogoLayout.setVerticalGroup(

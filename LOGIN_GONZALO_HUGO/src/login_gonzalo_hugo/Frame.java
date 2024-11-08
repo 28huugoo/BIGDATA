@@ -16,12 +16,15 @@ import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.swing.JDialog;
 
 /**
  *
  * @author FP
  */
 public class Frame extends javax.swing.JFrame {
+
+    dialogo d1;
 
     /**
      * Creates new form Frame
@@ -226,8 +229,6 @@ public class Frame extends javax.swing.JFrame {
 
         jPanelBanda.setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\LOGIN_GONZALO_HUGO\\img\\banner.png")); // NOI18N
-
         javax.swing.GroupLayout jPanelBandaLayout = new javax.swing.GroupLayout(jPanelBanda);
         jPanelBanda.setLayout(jPanelBandaLayout);
         jPanelBandaLayout.setHorizontalGroup(
@@ -364,7 +365,8 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jContrasenaFieldActionPerformed
 
     private void jCrearUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCrearUsuarioActionPerformed
-        new dialogo(this, true);
+        d1 = new dialogo(this, true);
+        d1.ponerNombre(jUsuarioField.getText().toString());
     }//GEN-LAST:event_jCrearUsuarioActionPerformed
 
     private void jAccederUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAccederUsuarioActionPerformed
