@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="820.0" prefWidth="842.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-3.0" layoutY="126.0" prefHeight="73.0" prefWidth="439.0" style="-fx-background-color: GREEN;" text="RENOM NIVEL 100" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Yu Gothic UI Semibold" size="36.0" />
+         </font>
+         <effect>
+            <Lighting bumpInput="$null">
+               <light>
+                  <Light.Distant>
+                     <color>
+                        <Color red="1.0" />
+                     </color>
+                  </Light.Distant>
+               </light>
+            </Lighting>
+         </effect>
+      </Label>
+      <ImageView fitHeight="622.0" fitWidth="442.0" layoutX="-3.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../Desktop/Captura%20de%20pantalla%202024-12-12%20104749.png" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" prefHeight="127.0" prefWidth="842.0" style="-fx-background-color: red;" text="Ficha de Personaje" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Yu Gothic UI Semibold" size="51.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

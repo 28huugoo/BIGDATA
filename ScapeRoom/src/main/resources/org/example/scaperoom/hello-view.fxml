@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="683.0" style="-fx-background-color: Black;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.scaperoom.HelloController">
+  <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Button id="Boton" fx:id="Boton" mnemonicParsing="false" onAction="#abrirVentana" prefHeight="137.0" prefWidth="231.0" style="-fx-background-color: Black;" text="INICIAR JUEGO" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <font>
+            <Font name="Sitka Display Bold" size="21.0" />
+         </font>
+         <effect>
+            <DropShadow blurType="GAUSSIAN">
+               <color>
+                  <Color red="0.46052631735801697" />
+               </color>
+            </DropShadow>
+         </effect>
+         <GridPane.margin>
+            <Insets left="20.0" right="40.0" />
+         </GridPane.margin>
+      </Button>
+      <ImageView fitHeight="454.0" fitWidth="352.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+         <image>
+            <Image url="@../../../img/arquera.png" />
+         </image>
+         <GridPane.margin>
+            <Insets left="50.0" />
+         </GridPane.margin></ImageView>
+   </children>
+</GridPane>
