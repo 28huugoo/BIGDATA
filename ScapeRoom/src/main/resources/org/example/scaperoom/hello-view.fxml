@@ -30,7 +30,7 @@
          <effect>
             <DropShadow blurType="GAUSSIAN">
                <color>
-                  <Color red="0.46052631735801697" />
+                  <Color red="0.02984892763197422" green="0.5832480788230896" blue="0.6447368264198303" />
                </color>
             </DropShadow>
          </effect>

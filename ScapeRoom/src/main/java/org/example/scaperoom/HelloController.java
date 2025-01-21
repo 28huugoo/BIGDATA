@@ -17,17 +17,10 @@ public class HelloController {
 
     @FXML
     private void abrirVentana() throws IOException {
-        // Cargar el archivo FXML de la nueva ventana (por ejemplo, SecondWindow.fxml)
         FXMLLoader loader = new FXMLLoader(getClass().getResource("salas.fxml"));
         AnchorPane root = loader.load();
-
-        // Obtener el Stage actual (ventana principal)
         Stage currentStage = (Stage) Boton.getScene().getWindow();
-
-        // Cambiar la escena actual por la nueva escena
         currentStage.setScene(new Scene(root));
-
-        // Mostrar la nueva ventana
         currentStage.show();
     }
 }
